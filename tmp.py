@@ -5,4 +5,4 @@ for _ in range(t):
     for i in range(len(mystr)):
         if mystr[i] == '1':
             ans += 1
-    print(ans)
+    print(ans) 
