@@ -1,44 +1,47 @@
 #include <iostream>
-#include <algorithm>
 using namespace std;
+const int N = 100010;
+typedef pair<long long, long long> PII;
+long long n,m,ans;
+PII a[N];
 
-const int N = 1e5+10;
-int p[N],c[N];
-long long a[100*N];
+//二分条件
+bool check(int u){   
+    long long sum = 0;
+    for (int i =1;i <=n;i++){   //遍历
+        if(a[i].second >u)  // 需求比团练次数大的士兵  
+            sum += a[i].first;
+    }
+    if (sum <= m) return true;    // 团队训练花费
+    else return false;
+}
 
 int main(){
-    int n;
-    // cout << n;    // 无效随机值
-    long long s;
-    cin >> n >> s;
-    int max_t = 0;          // 记录所有士兵中最大的单独训练次数
-    long long ans = 0;
-    long long sum_cost = 0;
-    for(int i =1;i<=n;i++){
-        cin >> p[i]>>c[i];
-        sum_cost += p[i];   // 所有士兵每次升级的花费总和
-        a[c[i]]+=p[i];      // 所有需要升级到c[i]级的士兵每次升级的花费总和
-        max_t = max(max_t,c[i]);
+    scanf("%lld %lld", &n,&m);    // n个士兵，m元团练
+    long long mx = -N;
+    for(int i=1;i<=n;i++){
+        long long x,y;
+        scanf("%lld %lld", &x, &y);
+        a[i].first=x,a[i].second=y;   // 士兵费用，训练次数
+        mx = max(mx, y);   // 所有士兵的最大训练次数
     }
+    long long l=0,r=mx;   // 左右边界,团练次数从0排到mx
 
-    for(int i=1;i<=max_t;i++){
-        if(sum_cost>s){
-            ans+=s;
-        }
-        else{
-            ans += sum_cost;
-        }
-        sum_cost -= a[i];   // 升满到i级的士兵无须参与训练
+    //团练次数从0到mx，二分查找最小划算的团练次数
+    // 寻找右区间左边界版本
+    while(r>l){
+        long long mid = (l + r) >> 1;
+        if (check(mid)) r = mid;    // 满足右区间：团练训练mid次后，各自训练的总花费比继续团练小
+        else l = mid + 1;
     }
-
-    cout << ans<<endl;
-    return 0;
     
-    // int p[n + 10], c[n+10];
-    // for (int i = 1; i <= n; i++){
-    //     cin >> p[i] >> c[i];
-    // }
+    // 二分结果：团练l次，然后各自训练
 
-    // int cost = 0;
+    for (int i =1;i<=n;i++){
+        if(a[i].second >l)   // 需求比团练次数大的士兵
+            ans += a[i].first*(a[i].second -l);    // 除去团练次数，各自训练的费用
+    }
+    printf("%lld", ans+m*l);    // 加上l次团练费用
+    return 0;
 
 }
