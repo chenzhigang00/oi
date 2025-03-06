@@ -35,11 +35,9 @@
 
 ![image-20250208112929819](C:/Users/Gang%20Clouder/AppData/Roaming/Typora/typora-user-images/image-20250208112929819.png) 
 
+### 消除游戏
 
-
-
-
-
+![image-20250214073342111](C:/Users/Gang%20Clouder/AppData/Roaming/Typora/typora-user-images/image-20250214073342111.png)
 
 
 

@@ -1,42 +1,32 @@
-def fun4():
-    x1,x2,x3=a+b,c+d,e+f
-    for i in [a,b]:
-        for j in [c,d]:
-            for k in [e,f]:
-                if i == j == k:   # 三个矩阵有相同的边
-                    return True
-                if i == j and x1+x2-i-j == k:
-                    return True
-                if i == k and x1+x3-i-k == j:
-                    return True
-                if j == k and x2+x3-j-k == i:
-                    return True
-    return False
+# coding=utf-8
 
-def fun6():
-    for i in [a,b]:
-        for j in [c,d]:
-            for k in [e,f]:
-                if i ==j or i == k or j == k:
-                    return True
-                if i + j == k or i + k == j or j + k == i:
-                    return True
-    return False
+import requests
+import json
 
-def solve():
-    if fun4():
-        print(4)
-        return
-    if fun6():
-        print(6)
-        return
-    print(8)
-    return
+if __name__ == '__main__':
+    url = "https://infer-modelarts-cn-southwest-2.modelarts-infer.com/v1/infers/952e4f88-ef93-4398-ae8d-af37f63f0d8e/v1/chat/completions"
 
-if __name__ == "__main__":
-    t = int(input())
-    for _ in range(t):
-        a,b,c,d,e,f=map(int,input().split())
-        solve()
+    # Send request.
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer wwmxSG3baeJzSYmhCtAr7ErMafPRUo8QsOUbn6sKATr60pnfuXc5uyjkRuSNI7k2k6G6xZ5oz6C2NR_nH1aA7w' # 把yourApiKey替换成真实的API Key
+    }
+    data = {
+        "model": "DeepSeek-R1",
+        "max_tokens": 2000,
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": input("请输入您的问题：")}
+        ],
+        # 是否开启流式推理, 默认为False, 表示不开启流式推理
+        "stream": False,
+        # 在流式输出时是否展示使用的token数目。只有当stream为True时改参数才会生效。
+        # "stream_options": { "include_usage": True },
+        # 控制采样随机性的浮点数，值较低时模型更具确定性，值较高时模型更具创造性。"0"表示贪婪取样。默认为1.0。
+        "temperature": 0.8
+    }
+    resp = requests.post(url, headers=headers, data=json.dumps(data), verify=False)
 
-        
+    # Print result.
+    print(resp.status_code)
+    print(resp.text)
