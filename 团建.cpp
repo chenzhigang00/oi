@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cstring>
 #include <vector>
-#include <map>
+//#include <map>
 using namespace std;
 
 const int N = 2e5+10;
@@ -14,21 +14,21 @@ void dfs(int u, int d, int w){
     sta[u] = true;
     visb[w] = true;
     dmax = max(dmax, d);
-    map<int,int> bk;
-    for (int i:atir[u])
-        if (!sta[i])
-            bk[a[i]] = i;
+    //map<int,int> bk;
+    // for (int i:atir[u])
+    //     if (!sta[i])
+    //         bk[a[i]] = i;
     
-    for (int j:btir[w])
-        if (!visb[j] && bk[b[j]])
-            dfs(bk[b[j]],d+1,j);
-    // for(int i: atir[u]){
-    //     for(int j:btir[w]){
-    //         if(a[i] == b[j] && !sta[i] && !visb[j]){
-    //             dfs(i,d+1,j);
-    //         }
-    //     }
-    // }
+    // for (int j:btir[w])
+    //     if (!visb[j] && bk[b[j]])
+    //         dfs(bk[b[j]],d+1,j);
+    for(int i: atir[u]){
+        for(int j:btir[w]){
+            if(a[i] == b[j] && !sta[i] && !visb[j]){
+                dfs(i,d+1,j);
+            }
+        }
+    }
 }
 
 int main(){
