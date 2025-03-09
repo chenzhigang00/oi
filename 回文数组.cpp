@@ -1,33 +1,36 @@
+// 贪心
 #include <iostream>
-#include <algorithm>
+#include <cmath>
 
+#define int long long
 using namespace std;
+const int N = 1e6 + 11;
 
-const int N = 100010;
-long long n, a[N], b[N], ans;
-
-int main(){
-    scanf("%lld", &n);
-    for (int i = 1; i<=n;i++)
-        scanf("%lld", &a[i]);
-
-    for (int i = 1; i<=n/2;i++){    // 差值数组b
-        if (a[i] < a[n-i+1])
-            b[i] = a[n-i+1] - a[i];
-        else if (a[i] > a[n - i + 1])
-            b[n - i + 1 ] = a[i] - a[n - i + 1];
+int a[N], b[N>>1];
+int sum,cnt,j;
+signed main(){
+    int n ;
+    cin >> n;
+    for (int i = 1; i <= n;i ++){
+        cin >> a[i];
     }
 
-    for (int i = 1;i < n; i++){
-        long long mn = min(b[i], b[i+1]);   // 相邻两个差值
-        b[i] -= mn;
-        b[i + 1] -= mn;
-        ans += mn;   // 操作次数
-        ans += b[i];
+    for (int i =1;i<=n/2;i++){
+        b[++j] = a[i] - a[n -i + 1];   // 记录对应差值
     }
-    ans += b[n];
+    int len =j;
+    for (int i =1; i <= len; i++){
+        cnt += abs(b[i]);   // 首先操作当前插值
+        // if(i!=n){
+        if (b[i] > 0 && b[i + 1] > 0){   // 同号，说明方向相同，可以一起操作
+            b[i + 1 ] -= min(b[i],b[i+1]);
+        }
+        if (b[i] < 0 && b[i + 1] < 0){
+            b[i + 1] -= max(b[i],b[i+1]);
+        }
+        // }
+    }
+    cout << cnt;
 
-    printf("%lld\n", ans);
     return 0;
-
 }
